@@ -1,5 +1,4 @@
-
-// import { readFileSync } from 'fs';
+import { readFileSync } from 'fs';
 // import marked from 'marked';
 // import { sanitizeHtml } from './sanitizer';
 // import { ParsedRequest } from './types';
@@ -7,101 +6,16 @@
 // const twOptions = { folder: 'svg', ext: '.svg' };
 // const emojify = (text: string) => twemoji.parse(text, twOptions);
 
-// const rglr = readFileSync(`${__dirname}/../_fonts/Inter-Regular.woff2`).toString('base64');
-// const bold = readFileSync(`${__dirname}/../_fonts/Inter-Bold.woff2`).toString('base64');
-// const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString('base64');
+//any local assets must be turned into data strings and inserted into html
+//bc puppeteer cannot access local files
+//required images
+let dyp_logo = 'data:image/svg+xml;utf8,' + encodeURIComponent(readFileSync(`${__dirname}/../insta-template/images/dyp.min.svg`).toString('utf8'));
+let background_image = 'data:image/png;base64,' + readFileSync(`${__dirname}/../insta-template/images/v20_70.png`).toString('base64');
+//required fonts
+const dm_ext = readFileSync(`${__dirname}/../_fonts/dm_mono_latin_ext.woff2`).toString('base64');
+const dm = readFileSync(`${__dirname}/../_fonts/dm_mono_latin.woff2`).toString('base64');
+const fugaz = readFileSync(`${__dirname}/../_fonts/fugaz_one.woff2`).toString('base64');
 
-// function getCssOG(theme: string, fontSize: string) {
-//     let background = 'white';
-//     let foreground = 'black';
-//     let radial = 'lightgray';
-
-//     if (theme === 'dark') {
-//         background = 'black';
-//         foreground = 'white';
-//         radial = 'dimgray';
-//     }
-//     return `
-//     @font-face {
-//         font-family: 'Inter';
-//         font-style:  normal;
-//         font-weight: normal;
-//         src: url(data:font/woff2;charset=utf-8;base64,${rglr}) format('woff2');
-//     }
-
-//     @font-face {
-//         font-family: 'Inter';
-//         font-style:  normal;
-//         font-weight: bold;
-//         src: url(data:font/woff2;charset=utf-8;base64,${bold}) format('woff2');
-//     }
-
-//     @font-face {
-//         font-family: 'Vera';
-//         font-style: normal;
-//         font-weight: normal;
-//         src: url(data:font/woff2;charset=utf-8;base64,${mono})  format("woff2");
-//       }
-
-//     body {
-//         background: ${background};
-//         background-image: radial-gradient(circle at 25px 25px, ${radial} 2%, transparent 0%), radial-gradient(circle at 75px 75px, ${radial} 2%, transparent 0%);
-//         background-size: 100px 100px;
-//         height: 100vh;
-//         display: flex;
-//         text-align: center;
-//         align-items: center;
-//         justify-content: center;
-//     }
-
-//     code {
-//         color: #D400FF;
-//         font-family: 'Vera';
-//         white-space: pre-wrap;
-//         letter-spacing: -5px;
-//     }
-
-//     code:before, code:after {
-//         content: '\`';
-//     }
-
-//     .logo-wrapper {
-//         display: flex;
-//         align-items: center;
-//         align-content: center;
-//         justify-content: center;
-//         justify-items: center;
-//     }
-
-//     .logo {
-//         margin: 0 75px;
-//     }
-
-//     .plus {
-//         color: #BBB;
-//         font-family: Times New Roman, Verdana;
-//         font-size: 100px;
-//     }
-
-//     .spacer {
-//         margin: 150px;
-//     }
-
-//     .emoji {
-//         height: 1em;
-//         width: 1em;
-//         margin: 0 .05em 0 .1em;
-//         vertical-align: -0.1em;
-//     }
-
-//     .heading {
-//         font-family: 'Inter', sans-serif;
-//         font-size: ${sanitizeHtml(fontSize)};
-//         font-style: normal;
-//         color: ${foreground};
-//         line-height: 1.8;
-//     }`;
-// }
 function getFonts() {
     return `
     @font-face {
@@ -109,10 +23,26 @@ function getFonts() {
       font-style: normal;
       font-weight: 400;
       font-display: swap;
-      src: url(https://fonts.gstatic.com/s/fugazone/v10/rax_HiWKp9EAITukFsl8AxhfsUjQ8Q.woff2) format('woff2');
+      src: url(data:font/woff2;charset=utf-8;base64,${fugaz}) format('woff2');
       unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
     }
-
+    @font-face {
+      font-family: 'DM Mono';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(data:font/woff2;charset=utf-8;base64,${dm_ext}) format('woff2');
+      unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+    /* latin */
+    @font-face {
+      font-family: 'DM Mono';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(data:font/woff2;charset=utf-8;base64,${dm}) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
     `;
 }
 function getCss() {
@@ -127,6 +57,7 @@ function getCss() {
       .background_image {
         width: 100%;
         height: 100%;
+        background-image: url("${background_image}");
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
@@ -141,6 +72,7 @@ function getCss() {
       .dyp_logo {
         width: 17%;
         height: 17%;
+        object-fit: contain;
         margin-top: 5%;
         margin-bottom: 2%;
       }
@@ -248,7 +180,10 @@ function getCss() {
 
 export function getHtml() {
     // const { text, theme, md, fontSize, images, widths, heights } = parsedReq;
-    let movement_name = "KELLY BEING A PM";
+    let movement_name = "ARSENAL BANNING";
+    let movement_slug = "nico";
+    // let actions_completed = [];
+
     return `<!DOCTYPE html>
     <html>
         <meta charset="utf-8">
@@ -258,14 +193,12 @@ export function getHtml() {
             ${getCss()}
         </style>
     <head>
-      <link href="https://fonts.googleapis.com/css?family=DM+Mono&display=swap" rel="stylesheet" />
-      <link href="https://fonts.googleapis.com/css?family=Fugaz+One&display=swap" rel="stylesheet" />
       <title>
         Document</title>
     </head>
     <body>
-      <div class="background_image" style="background-image: url(./images/v19_0.png)">
-        <img class="dyp_logo" src="../insta-template/images/dyp.svg"/>
+      <div class="background_image">
+        <img class="dyp_logo" src="${dyp_logo}"/>
         <div class="content_view">
           <div class="top_content_view">
             <div class="text_chunk_1">
@@ -307,7 +240,7 @@ export function getHtml() {
                 DOYOURPART.io
               </span>
               <span class="white_italic_slug">
-                /blm
+                /${movement_slug}
               </span>
             </p>
           </div>
@@ -316,34 +249,6 @@ export function getHtml() {
     </body>
     </html>`;
 }
-
-// export function getHtmlOG(parsedReq: ParsedRequest) {
-//     const { text, theme, md, fontSize, images, widths, heights } = parsedReq;
-//     return `<!DOCTYPE html>
-// <html>
-//     <meta charset="utf-8">
-//     <title>Generated Image</title>
-//     <meta name="viewport" content="width=device-width, initial-scale=1">
-//     <style>
-//         ${getCss()}
-//     </style>
-//     <body>
-//         <div>
-//             <div class="spacer">
-//             <div class="logo-wrapper">
-//                 ${images.map((img, i) =>
-//                     getPlusSign(i) + getImage(img, widths[i], heights[i])
-//                 ).join('')}
-//             </div>
-//             <div class="spacer">
-//             <div class="heading">${emojify(
-//                 md ? marked(text) : sanitizeHtml(text)
-//             )}
-//             </div>
-//         </div>
-//     </body>
-// </html>`;
-// }
 
 // function getImage(src: string, width ='auto', height = '225') {
 //     return `<img

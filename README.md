@@ -38,6 +38,16 @@ It takes forever to design an image for every single campaign page and social me
 
 You'll want to fork this repository and deploy your own image generator.
 
+1. Clone this repo with `git clone https://github.com/vercel/og-image`
+2. Change directory with `cd og-image`
+3. Run `yarn` or `npm install` to install all dependencies
+4. Run locally with `vercel dev` and visit [localhost:3000](http://localhost:3000)  (if nothing happens, run `npm install -g vercel`)
+5. If necessary, edit the `exePath` in [options.ts](https://github.com/vercel/og-image/blob/main/api/_lib/options.ts) to point to your local Chrome executable
+
+Now you're ready to start local development!
+
+You can set an environment variable to assist with debugging `export OG_HTML_DEBUG=1`. This will render the image as HTML so you can play around with your browser's dev tools before committing changes to the template.
+
 
 ## Authors
 - Jonathan Wong @wonathanjong
