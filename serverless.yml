@@ -1,0 +1,38 @@
+#used to upload to aws lambda only
+service: dynamic-image-generator
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+# plugins:
+#   - serverless-plugin-typescript
+#   - serverless-offline
+
+# package:
+#   exclude:
+#     - config/.env.stg
+#     - config/.env.pro
+#   include:
+#     - config/.env.dev
+
+functions:
+  create:
+    handler: api/lambda_handler.create
+    memorySize: 3008
+    events:
+      - http:
+          path: books
+          method: post
+  find:
+    handler: app/handler.find
+    events:
+      - http:
+          path: books
+          method: get
+  findOne:
+    handler: app/handler.findOne
+    events:
+      - http:
+          path: books/{id}
+          method: get

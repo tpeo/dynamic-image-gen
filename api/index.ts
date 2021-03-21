@@ -1,12 +1,13 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { parseRequest } from './_lib/parser';
 import { getScreenshot } from './_lib/chromium';
-import { getHtml } from './_lib/template';
+import { getHtml } from './_templates/insta-story/template';
 
 const isDev = !process.env.AWS_REGION;
 const isHtmlDebug = process.env.OG_HTML_DEBUG === '1';
 
-export default async function handler(req: IncomingMessage, res: ServerResponse) {
+//this file is only used to handle vercel requests
+export default async function vercelHandler(req: IncomingMessage, res: ServerResponse) {
     try {
         const parsedReq = parseRequest(req);
         const html = getHtml();
@@ -19,8 +20,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         const file = await getScreenshot(html, fileType, isDev);
         res.statusCode = 200;
         res.setHeader('Content-Type', `image/${fileType}`);
-        res.setHeader('Cache-Control', `public, immutable, no-transform, s-maxage=0, max-age=0`);
-        // res.setHeader('Cache-Control', `public, immutable, no-transform, s-maxage=31536000, max-age=31536000`);
+
+        res.setHeader('Cache-Control', `public, immutable, no-transform, s-maxage=0, max-age=0`);//doesn't store in cache
+        // res.setHeader('Cache-Control', `public, immutable, no-transform, s-maxage=31536000, max-age=31536000`); //stores in cache for hecka long
         res.end(file);
     } catch (e) {
         res.statusCode = 500;

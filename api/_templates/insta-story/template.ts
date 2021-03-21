@@ -9,12 +9,12 @@ import { readFileSync } from 'fs';
 //any local assets must be turned into data strings and inserted into html
 //bc puppeteer cannot access local files
 //required images
-let dyp_logo = 'data:image/svg+xml;utf8,' + encodeURIComponent(readFileSync(`${__dirname}/../insta-template/images/dyp.min.svg`).toString('utf8'));
-let background_image = 'data:image/png;base64,' + readFileSync(`${__dirname}/../insta-template/images/v20_70.png`).toString('base64');
+let dyp_logo = 'data:image/svg+xml;utf8,' + encodeURIComponent(readFileSync(`${__dirname}/images/dyp.min.svg`).toString('utf8'));
+let background_image = 'data:image/png;base64,' + readFileSync(`${__dirname}/images/v20_70.png`).toString('base64');
 //required fonts
-const dm_ext = readFileSync(`${__dirname}/../_fonts/dm_mono_latin_ext.woff2`).toString('base64');
-const dm = readFileSync(`${__dirname}/../_fonts/dm_mono_latin.woff2`).toString('base64');
-const fugaz = readFileSync(`${__dirname}/../_fonts/fugaz_one.woff2`).toString('base64');
+const dm_ext = readFileSync(`${__dirname}/../../_fonts/dm_mono_latin_ext.woff2`).toString('base64');
+const dm = readFileSync(`${__dirname}/../../_fonts/dm_mono_latin.woff2`).toString('base64');
+const fugaz = readFileSync(`${__dirname}/../../_fonts/fugaz_one.woff2`).toString('base64');
 
 function getFonts() {
     return `
