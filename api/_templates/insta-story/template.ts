@@ -10,7 +10,8 @@ import { readFileSync } from 'fs';
 //bc puppeteer cannot access local files
 //required images
 let dyp_logo = 'data:image/svg+xml;utf8,' + encodeURIComponent(readFileSync(`${__dirname}/images/dyp.min.svg`).toString('utf8'));
-let background_image = 'data:image/png;base64,' + readFileSync(`${__dirname}/images/v20_70.png`).toString('base64');
+let overlay_image = 'data:image/png;base64,' + readFileSync(`${__dirname}/images/v20_70.png`).toString('base64');
+let bg = 'data:image/png;base64,' + readFileSync(`${__dirname}/images/v19_0.png`).toString('base64');
 //required fonts
 const dm_ext = readFileSync(`${__dirname}/../../_fonts/dm_mono_latin_ext.woff2`).toString('base64');
 const dm = readFileSync(`${__dirname}/../../_fonts/dm_mono_latin.woff2`).toString('base64');
@@ -45,7 +46,8 @@ function getFonts() {
     }
     `;
 }
-function getCss() {
+function getCss(background_image: String, slug_length: number) {
+    const slug_limit = 7;
     return getFonts() + `body, html {
         margin: 0px;
         display: flex;
@@ -54,10 +56,29 @@ function getCss() {
         padding: 0;
         margin: 0;
       }
+      .overlay_image {
+        width: 100%;
+        height: 100%;
+        position: fixed; /* Sit on top of the page content */
+        display: block;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("${overlay_image}");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        opacity: 1;
+        z-index: 998;
+        mix-blend-mode: screen;
+      }
       .background_image {
         width: 100%;
         height: 100%;
-        background-image: url("${background_image}");
+        ${
+          !!background_image ? `background-image: url("${background_image}");` : `background-color: black;`
+        }
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
@@ -66,7 +87,6 @@ function getCss() {
         overflow: hidden;
         display: flex;
         align-items: center;
-        /* justify-content: space-around; */
         flex-direction: column;
       }
       .dyp_logo {
@@ -92,6 +112,7 @@ function getCss() {
         /* align-items: center; */
         justify-content: space-evenly;
         padding-left: 8%;
+        padding-right: 7%;
         padding-top: 5%;
         padding-bottom: 5%;
       }
@@ -102,26 +123,41 @@ function getCss() {
         display: flex;
         flex-direction: column;
         padding-left: 8%;
-        padding-top: 8%;
-        padding-bottom: 5%;
+        padding-right: 8%;
+        ${
+          slug_length > slug_limit ? "padding-top: 5%; \n padding-bottom: 3%;" : "padding-top: 7%; \n padding-bottom: 7%;"
+        }
         justify-content: center;
-        overflow: hidden;
+        /* change from flex-start to center if slug long*/
+        ${
+          slug_length >slug_limit ? "align-items: center;" : "align-items: flex-start;"
+        }
+        z-index: 999;
+      }
+      .link_text {
+        display: flex;
+        ${
+          slug_length >slug_limit ? "flex-direction: column;" : "flex-direction: row;"
+        }
       }
       .text_chunk_1 {
         display: flex;
         flex: 2;
         padding-top: 5%;
         flex-direction: column;
+        z-index: 999;
       }
       .text_chunk_2 {
         display: flex;
         flex: 5.5;
         flex-direction: column;
+        z-index: 999;
       }
       .text_chunk_3 {
         display: flex;
         flex: 3.5;
         flex-direction: column;
+        z-index: 999;
       }
       .regular_text {
         color: rgba(0,0,0,1);
@@ -131,6 +167,7 @@ function getCss() {
         opacity: 1;
         text-align: left;
         padding-bottom: 2.5%;
+        z-index: 999;
       }
       .bottom_text {
         color: rgba(255,255,255,1);
@@ -164,7 +201,9 @@ function getCss() {
         font-weight: Regular;
         font-size: 61px;
         opacity: 1;
-        text-align: left;
+        ${
+          slug_length >slug_limit ? "text-align: center;" : "text-align: left;"
+        }
         text-decoration: underline;
       }
       .black_italic_text {
@@ -177,12 +216,17 @@ function getCss() {
         padding-bottom: 2.5%;
       }`;
 }
-
+// export function getHtml(bgImg="", actions=[], name="", slug="") {
 export function getHtml() {
     // const { text, theme, md, fontSize, images, widths, heights } = parsedReq;
-    let movement_name = "ARSENAL BANNING";
-    let movement_slug = "nico";
-    // let actions_completed = [];
+    let movement_name = "VOTER SUPPRESSION";
+    let movement_slug = "votepls";
+    let actions_completed = [
+      {body: "FUCKED ^%^ PETITIONS", count: 20},
+      {body: "DONATED $^%^", count: 20},
+      {body: "SENT ^%^ TEXTS", count: 20},
+      {body: "MADE ^%^ PHONE CALLS", count: 20},
+    ];
 
     return `<!DOCTYPE html>
     <html>
@@ -190,13 +234,10 @@ export function getHtml() {
         <title>Generated Image</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
-            ${getCss()}
+            ${getCss(bg, movement_slug.length)}
         </style>
-    <head>
-      <title>
-        Document</title>
-    </head>
     <body>
+      <div class="overlay_image"> </div>
       <div class="background_image">
         <img class="dyp_logo" src="${dyp_logo}"/>
         <div class="content_view">
@@ -207,18 +248,16 @@ export function getHtml() {
               </span>
             </div>
             <div class="text_chunk_2">
-              <span class="regular_text">
-                SIGNED 31 PETITIONS,
-              </span>
-              <span class="regular_text">
-                DONATED $50,
-              </span>
-              <span class="regular_text">
-                SENT 7 TEXTS,
-              </span>
-              <span class="regular_text">
-                MADE 2 PHONE CALLS
-              </span>
+            ${
+              actions_completed.map((item, index) => {
+                return (
+                  `<span class="regular_text">${
+                      item.body.replace("^%^", item.count.toString()) +
+                      (index !== actions_completed.length - 1 ? "," : "")
+                    }</span>`
+                )
+              }).join('\n')
+            }
             </div>
             <div class="text_chunk_3">
               <span class="regular_text">
@@ -235,7 +274,7 @@ export function getHtml() {
           <div class="bottom_content_view">
             <span class="bottom_text">
               JOIN ME @</span>
-            <p style="display: flex">
+            <p class="link_text">
               <span class="white_italic_url">
                 DOYOURPART.io
               </span>
@@ -258,8 +297,4 @@ export function getHtml() {
 //         width="${sanitizeHtml(width)}"
 //         height="${sanitizeHtml(height)}"
 //     />`
-// }
-
-// function getPlusSign(i: number) {
-//     return i === 0 ? '' : '<div class="plus">+</div>';
 // }
