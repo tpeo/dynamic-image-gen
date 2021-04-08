@@ -13,7 +13,8 @@ export default async function vercelHandler(req: IncomingMessage, res: ServerRes
         console.log(parsedReq);
         var html = '';
         let query = parsedReq.query;
-
+        var file = null;
+        const fileType = 'jpeg';
         //determine image template to return
         if (parsedReq.extension === 'insta-story') {
             const queryData = {
@@ -22,6 +23,7 @@ export default async function vercelHandler(req: IncomingMessage, res: ServerRes
                 slug: (query.slug as string || 'dyp')
             }
             html = instaStory(queryData);
+            file = await getScreenshot(html, fileType, isDev, 1080, 1920);
         }
 
         if (isHtmlDebug) {
@@ -29,8 +31,7 @@ export default async function vercelHandler(req: IncomingMessage, res: ServerRes
             res.end(html);
             return;
         }
-        const fileType = 'png';
-        const file = await getScreenshot(html, fileType, isDev);
+
         res.statusCode = 200;
         res.setHeader('Content-Type', `image/${fileType}`);
         res.setHeader('Cache-Control', `public, immutable, no-transform, s-maxage=0, max-age=0`);//doesn't store in cache

@@ -13,9 +13,9 @@ async function getPage(isDev: boolean) {
     return _page;
 }
 
-export async function getScreenshot(html: string, type: FileType, isDev: boolean) {
+export async function getScreenshot(html: string, type: FileType, isDev: boolean, width: number, height: number) {
     const page = await getPage(isDev);
-    await page.setViewport({ width: 1080, height: 1920 });
+    await page.setViewport({ width: width, height: height });
     await page.setContent(html);
     //need to set timeout to load some assets but hardcoded
     // await setTimeout(() => {  console.log("World!"); }, 2000);
