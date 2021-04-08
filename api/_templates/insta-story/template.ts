@@ -1,10 +1,4 @@
 import { readFileSync } from 'fs';
-// import marked from 'marked';
-// import { sanitizeHtml } from './sanitizer';
-// import { ParsedRequest } from './types';
-// const twemoji = require('twemoji');
-// const twOptions = { folder: 'svg', ext: '.svg' };
-// const emojify = (text: string) => twemoji.parse(text, twOptions);
 
 //any local assets must be turned into data strings and inserted into html
 //bc puppeteer cannot access local files
@@ -216,17 +210,19 @@ function getCss(background_image: String, slug_length: number) {
         padding-bottom: 2.5%;
       }`;
 }
+
+//define what data should be passed from index
+export interface InstaStoryReq {
+  movement: string,
+  slug: string,
+  actions: string
+}
+
 // export function getHtml(bgImg="", actions=[], name="", slug="") {
-export function getHtml() {
-    // const { text, theme, md, fontSize, images, widths, heights } = parsedReq;
-    let movement_name = "VOTER SUPPRESSION";
-    let movement_slug = "votepls";
-    let actions_completed = [
-      {body: "FUCKED ^%^ PETITIONS", count: 20},
-      {body: "DONATED $^%^", count: 20},
-      {body: "SENT ^%^ TEXTS", count: 20},
-      {body: "MADE ^%^ PHONE CALLS", count: 20},
-    ];
+export function getHtml(query: InstaStoryReq) {
+    let movement_name = query.movement.toUpperCase().replace("-", " ");
+    let movement_slug = query.slug;
+    let actions_completed = query.actions.split("--").map(x => x.toUpperCase().replace(/-/g, " "));
 
     return `<!DOCTYPE html>
     <html>
@@ -252,7 +248,7 @@ export function getHtml() {
               actions_completed.map((item, index) => {
                 return (
                   `<span class="regular_text">${
-                      item.body.replace("^%^", item.count.toString()) +
+                      item +
                       (index !== actions_completed.length - 1 ? "," : "")
                     }</span>`
                 )
