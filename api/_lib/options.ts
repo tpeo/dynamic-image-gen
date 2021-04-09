@@ -1,4 +1,4 @@
-import chrome from 'chrome-aws-lambda';
+import Chromium = require("chrome-aws-lambda")
 const exePath = process.platform === 'win32'
 ? 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
 : process.platform === 'linux'
@@ -21,9 +21,9 @@ export async function getOptions(isDev: boolean) {
         };
     } else {
         options = {
-            args: chrome.args,
-            executablePath: await chrome.executablePath,
-            headless: chrome.headless,
+            args: Chromium.args,
+            executablePath: await Chromium.executablePath,
+            headless: Chromium.headless,
         };
     }
     return options;

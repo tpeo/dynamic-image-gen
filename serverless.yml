@@ -5,34 +5,23 @@ provider:
   name: aws
   runtime: nodejs14.x
 
-# plugins:
-#   - serverless-plugin-typescript
+plugins:
+  - serverless-plugin-typescript
 #   - serverless-offline
 
-# package:
-#   exclude:
-#     - config/.env.stg
-#     - config/.env.pro
-#   include:
-#     - config/.env.dev
+package:
+  # exclude:
+  #   - config/.env.stg
+  #   - config/.env.pro
+  include:
+    - api/_fonts/*
+    - api/_templates/insta-story/images/*
 
 functions:
-  create:
-    handler: api/lambda_handler.create
+  instaStory:
+    handler: api/lambda_handler.instaStory
     memorySize: 3008
     events:
       - http:
-          path: books
-          method: post
-  find:
-    handler: app/handler.find
-    events:
-      - http:
-          path: books
-          method: get
-  findOne:
-    handler: app/handler.findOne
-    events:
-      - http:
-          path: books/{id}
+          path: instaStory
           method: get

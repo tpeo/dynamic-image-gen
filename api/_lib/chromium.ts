@@ -1,4 +1,4 @@
-import core from 'puppeteer-core';
+import * as core from 'puppeteer-core';
 import { getOptions } from './options';
 import { FileType } from './types';
 let _page: core.Page | null;

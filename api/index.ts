@@ -25,13 +25,11 @@ export default async function vercelHandler(req: IncomingMessage, res: ServerRes
             html = instaStory(queryData);
             file = await getScreenshot(html, fileType, isDev, 1080, 1920);
         }
-
         if (isHtmlDebug) {
             res.setHeader('Content-Type', 'text/html');
             res.end(html);
             return;
         }
-
         res.statusCode = 200;
         res.setHeader('Content-Type', `image/${fileType}`);
         res.setHeader('Cache-Control', `public, immutable, no-transform, s-maxage=0, max-age=0`);//doesn't store in cache

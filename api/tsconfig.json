@@ -14,9 +14,10 @@
         "noUnusedParameters": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "lib": ["dom"]
     },
     "include": [
-        "./"
+        "./", "image_import.d.ts"
     ]
 }
