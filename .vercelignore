@@ -1,4 +1,6 @@
 .github
+.serverless
+serverless.yml
 node_modules
 api/dist
 public/dist
