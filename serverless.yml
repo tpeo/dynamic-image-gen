@@ -12,6 +12,7 @@ plugins:
 #   - serverless-offline
 
 custom:
+  #include here the types of images you'll be returning
   apigwBinary:
     types:
       - 'image/jpeg'
@@ -23,6 +24,7 @@ package:
   # exclude:
   #   - config/.env.stg
   #   - config/.env.pro
+  #make sure to include fonts/images/extra assets needed that aren't ts files
   include:
     - api/_fonts/*
     - api/_templates/insta-story/images/*
@@ -36,4 +38,4 @@ functions:
       - http:
           path: instaStory
           method: get
-          contentHandling: CONVERT_TO_BINARY
+          contentHandling: CONVERT_TO_BINARY #converts images to binary reducing image size

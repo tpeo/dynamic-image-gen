@@ -1,5 +1,7 @@
 .github
+.gitignore
 .serverless
+.build
 serverless.yml
 node_modules
 api/dist

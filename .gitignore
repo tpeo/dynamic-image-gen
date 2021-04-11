@@ -1,6 +1,7 @@
 .now
 .vercel
 .serverless
+.build
 node_modules
 api/dist
 public/dist
