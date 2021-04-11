@@ -7,7 +7,17 @@ provider:
 
 plugins:
   - serverless-plugin-typescript
+  - serverless-apigw-binary
+  - serverless-apigwy-binary
 #   - serverless-offline
+
+custom:
+  apigwBinary:
+    types:
+      - 'image/jpeg'
+      - 'image/jpg'
+      - 'image/png'
+      - '*/*'
 
 package:
   # exclude:
@@ -21,7 +31,9 @@ functions:
   instaStory:
     handler: api/lambda_handler.instaStory
     memorySize: 3008
+    timeout: 10
     events:
       - http:
           path: instaStory
           method: get
+          contentHandling: CONVERT_TO_BINARY

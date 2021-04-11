@@ -1,4 +1,4 @@
-import { getScreenshot } from './_lib/chromium';
+import { getScreenshot } from './_lib/chromium_lambda';
 import { getHtml as instaStory } from './_templates/insta-story/template';
 // import { Context } from 'aws-lambda';
 
@@ -34,7 +34,8 @@ exports.instaStory = async function (event: any = {}): Promise<any> {
                 "Content-Type": `image/${fileType}`,
                 "Cache-Control": cacheType
             },
-            body: file,
+            body: file.toString('base64'),
+            isBase64Encoded: true
           };
     } catch (e) {
         console.error(e);
