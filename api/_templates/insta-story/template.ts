@@ -220,7 +220,7 @@ export interface InstaStoryReq {
 
 // export function getHtml(bgImg="", actions=[], name="", slug="") {
 export function getHtml(query: InstaStoryReq) {
-    let movement_name = query.movement.toUpperCase().replace("-", " ");
+    let movement_name = query.movement.toUpperCase().replace(/-/g, ' ');
     let movement_slug = query.slug;
     let actions_completed = query.actions.split("--").map(x => x.toUpperCase().replace(/-/g, " "));
 
