@@ -20,8 +20,9 @@ export default async function vercelHandler(req: IncomingMessage, res: ServerRes
             const queryData = {
                 movement: (query.movement as string || 'Do Your Part'),
                 actions: (query.actions as string || 'completed 0 actions'),
-                slug: (query.slug as string || 'dyp')
-            }
+                slug: (query.slug as string || 'dyp'),
+                bgImage: (query.bgImage as string || '')
+            };
             html = instaStory(queryData);
             file = await getScreenshot(html, fileType, isDev, 1080, 1920);
         }

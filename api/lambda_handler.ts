@@ -11,7 +11,8 @@ exports.instaStory = async function (event: any = {}): Promise<any> {
         const queryData = {
             movement: (query.movement as string || 'Do Your Part'),
             actions: (query.actions as string || 'completed 0 actions'),
-            slug: (query.slug as string || 'dyp')
+            slug: (query.slug as string || 'dyp'),
+            bgImage: (query.bgImage as string || '')
         }
         let html = instaStory(queryData);
         file = await getScreenshot(html, fileType, false, 1080, 1920);

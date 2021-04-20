@@ -1,11 +1,11 @@
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 
 //any local assets must be turned into data strings and inserted into html
 //bc puppeteer cannot access local files
 //required images
 let dyp_logo = 'data:image/svg+xml;utf8,' + encodeURIComponent(readFileSync(`${__dirname}/images/dyp.min.svg`).toString('utf8'));
 let overlay_image = 'data:image/png;base64,' + readFileSync(`${__dirname}/images/v20_70.png`).toString('base64');
-let bg = 'data:image/png;base64,' + readFileSync(`${__dirname}/images/v19_0.png`).toString('base64');
+
 //required fonts
 const dm_ext = readFileSync(`${__dirname}/../../_fonts/dm_mono_latin_ext.woff2`).toString('base64');
 const dm = readFileSync(`${__dirname}/../../_fonts/dm_mono_latin.woff2`).toString('base64');
@@ -215,14 +215,27 @@ function getCss(background_image: String, slug_length: number) {
 export interface InstaStoryReq {
   movement: string,
   slug: string,
-  actions: string
+  actions: string,
+  bgImage: string
 }
 
-// export function getHtml(bgImg="", actions=[], name="", slug="") {
 export function getHtml(query: InstaStoryReq) {
     let movement_name = query.movement.toUpperCase().replace(/-/g, ' ');
     let movement_slug = query.slug;
     let actions_completed = query.actions.split("--").map(x => x.toUpperCase().replace(/-/g, " "));
+    var bgImage = query.bgImage;
+    //override checking if bg image is provided
+    if (bgImage !== null) {
+      let path = `${__dirname}/images/${movement_slug}.png`;
+      try {
+        if (existsSync(path)) {
+          //file exists
+          bgImage = 'data:image/png;base64,' + readFileSync(path).toString('base64');
+        }
+      } catch(err) {
+        console.error(err)
+      }
+    }
 
     return `<!DOCTYPE html>
     <html>
@@ -230,7 +243,7 @@ export function getHtml(query: InstaStoryReq) {
         <title>Generated Image</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
-            ${getCss(bg, movement_slug.length)}
+            ${getCss(bgImage, movement_slug.length)}
         </style>
     <body>
       <div class="overlay_image"> </div>
@@ -284,13 +297,3 @@ export function getHtml(query: InstaStoryReq) {
     </body>
     </html>`;
 }
-
-// function getImage(src: string, width ='auto', height = '225') {
-//     return `<img
-//         class="logo"
-//         alt="Generated Image"
-//         src="${sanitizeHtml(src)}"
-//         width="${sanitizeHtml(width)}"
-//         height="${sanitizeHtml(height)}"
-//     />`
-// }
